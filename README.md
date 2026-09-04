@@ -35,3 +35,17 @@ green once you fix it.
 - Setup: `SETUP.md`
 
 See the Lab 2 handout on the course page for the three milestones you show a TA.
+
+## Milestone 3: Audit of Generated Suite
+
+### Weaknesses in the generated suite
+1. **Controllability Gap**: The suite never tests the calculator with an empty list of bookings (`[]`). The test inputs always provide at least one booking, which means the edge case where the loop is entirely skipped is never verified.
+2. **Controllability Gap**: The suite largely ignores scenarios where a significant chunk of free time exists at the very end of the day. In tests like `bookingUntilEndOfDayLeavesTheMorningFree` and `gapsBetweenBookingsAreReturned`, the final booking always perfectly touches `DAY_END`. The test suite didn't adequately force the system to check if it correctly appends remaining time after the last booking.
+3. **Observability Gap**: In the `returnedSlotsNeverOverlapABooking` test, the input is `[600, 660)`, which leaves the afternoon free. The bug was actually triggered here, and the calculator omitted the afternoon slot! However, the test's assertions *only* check if the returned slots overlap with the booking (`assertFalse(slot.overlaps(booking))`). It completely failed to check if the returned slots were actually complete, meaning it ran the buggy code but its assertions couldn't see the wrong result.
+
+### Why high coverage did not save it
+High code coverage (like JaCoCo reporting 100% line coverage) only proves that the lines of code were *executed* during the test suite. It does not mean that every logical state or edge case (like an empty list) was reached (controllability), nor does it guarantee that the test actually *asserts* the output is correct (observability). Coverage measures execution, not correctness.
+
+### Tools Used
+- **Agent/Tool**: Antigravity IDE
+- **Model**: Gemini 3.1 Pro (High)
