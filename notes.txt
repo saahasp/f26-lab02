@@ -1,0 +1,11 @@
+1. loop through every minute of the day to check for overlap because what if the calculator returns an empty list then there is no overlap with the bookings so it would be true
+error: the xor function checks to make sure it cant be free and booked at the same time and vice versa
+    - edge case where there are no bookings and no free slots in that day
+        -   dayStart = 0
+            dayEnd = 1
+            bookings = []
+
+2. The calculator failed to append any remaining free
+time occurring after the final booking (or when there
+were no bookings at all) because it only added free slots
+inside the loop over the booking list.

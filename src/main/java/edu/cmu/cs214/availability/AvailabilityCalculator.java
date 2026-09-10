@@ -35,6 +35,7 @@ public class AvailabilityCalculator {
             }
             cursor = Math.max(cursor, b.end());
         }
+        //add if cursor is still before the end of the day milestone 2
         if (cursor < dayEnd) {
             free.add(new TimeInterval(cursor, dayEnd));
         }
